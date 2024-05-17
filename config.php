@@ -7,7 +7,7 @@ $pw = "Password";
 $yhendus = mysqli_connect($dbserver, $kasutaja, $pw, $andmebaas);
 if(!$yhendus){
     // echo "jama majas";
-    die("Sa jälle ebaõnnestusid!");
+    die("Ei saa ühendust!");
 } 
 
 ?>

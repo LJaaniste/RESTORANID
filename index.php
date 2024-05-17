@@ -83,6 +83,54 @@
   </head>
   <body>
 
+  <?php
+
+        //otsing - tunnis tehtud
+    if (!empty($_GET["s"])){  
+    $s = $_GET["s"];
+    $paring = 'SELECT * FROM asutused WHERE nimi LIKE "%'.$s.'%" ';
+  } else {
+
+    if (!isset($_GET['next'])){
+        $algus = $_GET['next'];
+    }
+    } else if (isset($_GET['prev'])) {
+        $algus = $_GET['prev']-10;
+
+    } else {
+        $algus = 0;
+    }
+
+        $algus += 10;
+        $lopp = $algus - 10;
+
+
+    /************************** */
+
+        
+       // if (!isset($_GET['prev'])){
+         //   $algus = $_GET['prev'];
+           // } else {
+          
+         //   $algus = 0;
+         // }  
+          //  $algus -= 10;
+
+
+
+  //päring, mille saadan andmebaasi
+    /$paring = " SELECT * FROM asutused LIMIT $algus,10";
+}
+     
+
+       //saadan soovitud ühendusele minu päringu
+       $valjund = mysqli_query($yhendus, $paring);
+       // sikutame andmebaasist kõik vastused
+       
+       while($rida = mysqli_fetch_assoc($valjund)) {  //siiani tunnis tehtud
+        
+        ?>
+
   <header>
         <h1>Valige asutus, mida hinnata</h1>
     </header>
@@ -94,8 +142,15 @@
                     <div class="col-md-3"></div>
                     <div class="col-md-3"></div>
                     <div class="col-md-3">
-            <form role="search">
-            <input class="form-control me-2" type="search" placeholder="Otsi" oninput="searchRestaurants()" aria-label="Search">             
+    
+        <form role="search" action="" method="get">
+      <input type="text" name="s">
+      <input type="submit">
+      
+         <div class="row row-cols-1 row-cols-md-6 g-4 pt-4">
+
+            <!--<form role="search"> -->
+           <!-- <input class="form-control me-2" type="search" placeholder="Otsi" oninput="searchRestaurants()" aria-label="Search"> -->            
         <!--<input type="search" id="searchInput" placeholder="Otsi..." oninput="searchRestaurants()"> -->
       </form>
         </div>
@@ -144,7 +199,7 @@
  //$prev_page = $page - 1;
  ?>
  
-   
+ <tr>
  <th>
     <a href="?sort=nimi&order=<?php echo $sort_by == 'nimi' && $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>">
         Nimi <?php if ($sort_by == 'nimi') { echo $sort_order == 'ASC' ? '▲' : '▼'; } else { echo '▼▲'; } ?>
@@ -165,6 +220,11 @@
         Hinnatud (korda) <?php if ($sort_by == 'hinnatud_korda') { echo $sort_order == 'ASC' ? '▲' : '▼'; } else { echo '▲▼'; } ?>
     </a>
     </th>
+    </tr>
+
+    <?php
+       }
+    ?>
    
     
     </thead>
@@ -174,14 +234,18 @@
         
 
     // Funktsioon, mis tagastab andmed vastavalt lehekülje numbrile ja sordi parameetrile
-    function fetchRestaurants($page, $sort_by, $sort_order, $search_term) {
+
+   function fetchRestaurants($page, $sort_by, $sort_order, $search_term) {
     global $yhendus;
     $offset = ($page - 1) * 10; // Arvutame offseti
     $query = "SELECT * FROM asutused WHERE nimi LIKE '%$search_term%' OR asukoht LIKE '%$search_term%' ORDER BY $sort_by $sort_order LIMIT 10 OFFSET $offset";
         print_r($query);
     $result = mysqli_query($yhendus, $query);
     return $result;
-}
+    }
+
+    
+   
 
 $sort_by = isset($_GET['sort']) ? $_GET['sort'] : 'nimi';
 $sort_order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
@@ -218,7 +282,7 @@ $result = fetchRestaurants($page, $sort_by, $sort_order, $search_term);
                     <div class="col-md-3"></div>
                     <div class="col-md-3">
 
-        <div class="pagination">
+        <div class="lk vahetus">
         <?php if ($page > 1): ?>
                 <a href="?sort=<?php echo $sort_by ?>&page=<?php echo $page - 1 ?>"> < Eelmine</a> 
             <?php endif; ?>
@@ -230,6 +294,10 @@ $result = fetchRestaurants($page, $sort_by, $sort_order, $search_term);
         </div>
         </div>
         </div>
+        
+        <!--tunnis tehtud -->
+        <a href="?prev=<?php echo $algus-10; ?>">&lt;&lt;Eelmised</a>
+        <a href="?next=10<?php echo $algus; ?> Järgmised&lt;&lt;</a>
 
     </main>
 
