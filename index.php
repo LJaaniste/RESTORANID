@@ -1,5 +1,5 @@
 <?php include("config.php"); ?>
-
+ 
 <!doctype html>
 <html lang="et">
   <head>
