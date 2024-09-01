@@ -1,60 +1,72 @@
-<?php include("config.php"); ?>
+<?php
+include('config.php'); // Ühendus andmebaasiga
 
-<!doctype html>
+// Kontrollime, kas vormi on esitatud
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $kasutajanimi = mysqli_real_escape_string($yhendus, $_POST['kasutajanimi']);
+    $kommentaar = mysqli_real_escape_string($yhendus, $_POST['kommentaar']);
+    $hinnang = (int) $_POST['hinnang']; // Eeldame, et hinnang on arv
+    $asutused_id = (int) $_POST['asutused_id'];
+
+    // Kontrollime, kas kõik väljad on täidetud
+    if (empty($kasutajanimi) || empty($kommentaar) || empty($hinnang) || empty($asutused_id)) {
+        echo "Kõik väljad on kohustuslikud!";
+    } else {
+        // Sisestame andmed andmebaasi
+        $query = "INSERT INTO hinnangud (kasutajanimi, kommentaar, hinnang, asutused_id) VALUES ('$kasutajanimi', '$kommentaar', $hinnang, $asutused_id)";
+        if (mysqli_query($yhendus, $query)) {
+            echo "Andmed on salvestatud!";
+            // Suuname kasutaja tagasi avalehele
+            header('Location: index.php');
+            exit();
+        } else {
+            echo "Viga andmete salvestamisel: " . mysqli_error($yhendus);
+        }
+    }
+}
+
+// Siin on kood, et näidata hindamise vormi
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $asutused_id = (int) $_GET['id'];
+?>
+
+<!DOCTYPE html>
 <html lang="et">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hinda restorani</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <title>Hinda kohta</title>
+</head>
+<body>
+    <h1>Hinda kohta</h1>
+    <form action="hindamine.php" method="post">
+        <label for="kasutajanimi">Nimi:</label>
+        <input type="text" name="kasutajanimi" required><br>
 
+        <label for="kommentaar">Kommentaar:</label>
+        <textarea name="kommentaar" required></textarea><br>
 
-    </head>
-  <body>
+        <label for="hinnang">Hinnang:</label>
+        <input type="radio" name="hinnang" value="1" required>1
+        <input type="radio" name="hinnang" value="2">2
+        <input type="radio" name="hinnang" value="3">3
+        <input type="radio" name="hinnang" value="4">4
+        <input type="radio" name="hinnang" value="5">5
+        <input type="radio" name="hinnang" value="6">6
+        <input type="radio" name="hinnang" value="7">7
+        <input type="radio" name="hinnang" value="8">8
+        <input type="radio" name="hinnang" value="9">9
+        <input type="radio" name="hinnang" value="10">10<br>
 
-  <div class="container">
-        <div class="rating-form">
-            <h2>Hinda kohta > <span id="restaurantName"><?php echo $_GET['name']; ?></span></h2>
-            <form action="#" method="post">
-                <label for="name">Sinu nimi:</label><br>
-                <input type="text" id="name" name="name"><br>
-                <label for="comment">Kommentaar:</label><br>
-                <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
-                <label for="rating">Hinnang:</label><br>
-                <div class="rating-stars">
-                    <span onclick="setRating(1)">☆</span>
-                    <span onclick="setRating(2)">☆</span>
-                    <span onclick="setRating(3)">☆</span>
-                    <span onclick="setRating(4)">☆</span>
-                    <span onclick="setRating(5)">☆</span>
-                    <span onclick="setRating(6)">☆</span>
-                    <span onclick="setRating(7)">☆</span>
-                    <span onclick="setRating(8)">☆</span>
-                    <span onclick="setRating(9)">☆</span>
-                    <span onclick="setRating(10)">☆</span>
-                </div>
-                <input type="submit" value="Hinda">
-            </form>
-        </div>
-    </div>
+        <!-- Sisestame asutuse ID peidetud väljana -->
+        <input type="hidden" name="asutused_id" value="<?php echo $asutused_id; ?>">
 
+        <button type="submit">Saada</button>
+    </form>
 
-
-
-
-
-
-
-
-
-
-
-
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-<script src="https://unpkg.com/bootstrap-icons/font/bootstrap-icons.css"></script>
-  </body>
+    <a href="index.php">Tagasi</a>
+</body>
 </html>
 
-
+<?php
+}
+?>

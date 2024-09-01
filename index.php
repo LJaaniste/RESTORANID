@@ -1,65 +1,44 @@
 <?php include("config.php"); ?>
- 
+
 <!doctype html>
 <html lang="et">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Restoranide hindamine</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
+    </script>  
+    
     <style>
-        /* Üldine stiil */
+        /* Stiilid siia */
         body {
             font-family: Arial, sans-serif;
         }
         table {
-            width: 80%; /* Tabeli laius */
-            margin: 0 auto; /* Tabel keskele */
-            border-collapse: collapse; /* Lahtrite piirjooned */
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
         }
         th, td {
-            padding: 8px; /* Lahtri polstri suurus */
-            border: 1px solid #ddd; /* Lahtrite piirjooned */
-            text-align: left; /* Tekst vasakule */
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
         }
         th {
-            background-color: #f2f2f2; /* Ülemine rida halli värvi */
+            background-color: #f2f2f2;
         }
-        thead th {
-        height: 50px; 
-        }
-        /* Pealkiri ja otsingulahter */
-        header {
-            display: flex;
-            justify-content: space-between;
-        }
-        .search {
-            margin-top: 20px;
-        }
-        .pagination {
-            margin-top: 20px;
-        }
-        .rating-form {
-            margin-top: 20px;
-            border-top: 2px solid #ccc;
-            padding-top: 20px;
-        }
-        .rating-stars span {
-            font-size: 24px;
-            color: #ddd;
-            cursor: pointer;
-        }
-        .rating-stars span:hover,
-        .rating-stars span.active {
-            color: #4CAF50;
-        }
-        .search-container {
-          float: right;
-        }
-        th {
-            position: relative;
-            cursor: pointer;
+        th a {
+            text-decoration: none;
+            color: black;
         }
         th::after {
             content: '';
@@ -80,232 +59,119 @@
             border-top: 6px solid #000;
         }
     </style>
-  </head>
-  <body>
+</head>
 
-  <?php
+<body>
 
-        //otsing - tunnis tehtud
-    if (!empty($_GET["s"])){  
-    $s = $_GET["s"];
-    $paring = 'SELECT * FROM asutused WHERE nimi LIKE "%'.$s.'%" ';
-  } else {
+<header>
+    <h1>Valige asutus, mida hinnata</h1>
+</header>
+<br>
 
-    if (!isset($_GET['next'])){
-        $algus = $_GET['next'];
-    }
-    } else if (isset($_GET['prev'])) {
-        $algus = $_GET['prev']-10;
-
-    } else {
-        $algus = 0;
-    }
-
-        $algus += 10;
-        $lopp = $algus - 10;
-
-
-    /************************** */
-
-        
-       // if (!isset($_GET['prev'])){
-         //   $algus = $_GET['prev'];
-           // } else {
-          
-         //   $algus = 0;
-         // }  
-          //  $algus -= 10;
-
-
-
-  //päring, mille saadan andmebaasi
-    /$paring = " SELECT * FROM asutused LIMIT $algus,10";
-}
-     
-
-       //saadan soovitud ühendusele minu päringu
-       $valjund = mysqli_query($yhendus, $paring);
-       // sikutame andmebaasist kõik vastused
-       
-       while($rida = mysqli_fetch_assoc($valjund)) {  //siiani tunnis tehtud
-        
-        ?>
-
-  <header>
-        <h1>Valige asutus, mida hinnata</h1>
-    </header>
-    <br>
-    <div class="container">
-      <div class="search">
-    <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3">
-    
-        <form role="search" action="" method="get">
-      <input type="text" name="s">
-      <input type="submit">
-      
-         <div class="row row-cols-1 row-cols-md-6 g-4 pt-4">
-
-            <!--<form role="search"> -->
-           <!-- <input class="form-control me-2" type="search" placeholder="Otsi" oninput="searchRestaurants()" aria-label="Search"> -->            
-        <!--<input type="search" id="searchInput" placeholder="Otsi..." oninput="searchRestaurants()"> -->
-      </form>
+<div class="container">
+    <div class="search">
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-3">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="s" placeholder="Otsi asutust" value="<?php echo htmlspecialchars($_GET['s'] ?? ''); ?>">
+                        <button class="btn btn-primary" type="submit">Otsi</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        </div>
-        </div>
-        </div>
+    </div>
+
     <main>
-      <br>
+        <br>
         <table border="1" id="restaurantTable">
             <thead>
-               <!-- <tr>
-                <th class="sortable" data-sort="nimi">
-                  Nimi
-                  <a href="?sort=nimi&order=asc"><i class="bi bi-caret-up-fill"></i></a>
-                  <a href="?sort=nimi&order=desc"><i class="bi bi-caret-down-fill"></i></a>
-                 </th>
+                <tr>
+                    <?php 
+                    $sort_by = $_GET['sort'] ?? 'nimi';
+                    $sort_order = $_GET['order'] ?? 'ASC';
+                    $page = $_GET['page'] ?? 1;
+                    $search_term = $_GET['s'] ?? '';
 
-                <th class="sortable" data-sort="asukoht">
-                  Asukoht
-                  <a href="?sort=asukoht&order=asc"><i class="bi bi-caret-up-fill"></i></a>
-                  <a href="?sort=asukoht&order=desc"><i class="bi bi-caret-down-fill"></i></a>
-                </th>
-
-                <th class="sortable" data-sort="keskmine_hinne">
-                  Keskmine hinne
-                  <a href="?sort=keskmine_hinne&order=asc"><i class="bi bi-caret-up-fill"></i></a>
-                  <a href="?sort=keskmine_hinne&order=desc"><i class="bi bi-caret-down-fill"></i></a>
-                </th>
-
-                <th class="sortable" data-sort="hinnatud_korda">
-                  Hinnatud (korda)
-                  <a href="?sort=hinnatud_korda&order=asc"><i class="bi bi-caret-up-fill"></i></a>
-                  <a href="?sort=hinnatud_korda&order=desc"><i class="bi bi-caret-down-fill"></i></a>
-                </th>        
-        </tr> --> 
-
-        
- <!--Algseadistus--> 
- <?php 
- $sort_by = isset($_GET['sort']) ? $_GET['sort'] : '';
- $sort_order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
- ?>
-
-<?php 
- //$next_page = $page + 1;
- //$prev_page = $page - 1;
- ?>
- 
- <tr>
- <th>
-    <a href="?sort=nimi&order=<?php echo $sort_by == 'nimi' && $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>">
-        Nimi <?php if ($sort_by == 'nimi') { echo $sort_order == 'ASC' ? '▲' : '▼'; } else { echo '▼▲'; } ?>
-    </a>
-</th>
-    <th>
-    <a href="?sort=asukoht&order=<?php echo $sort_by == 'asukoht' && $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>">
-        Asukoht <?php if ($sort_by == 'asukoht') { echo $sort_order == 'ASC' ? '▲' : '▼'; } else { echo '▲▼'; } ?>
-    </a>
-    </th>
-    <th>
-    <a href="?sort=keskmine_hinne&order=<?php echo $sort_by == 'keskmine_hinne' && $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>">
-        Keskmine hinne <?php if ($sort_by == 'keskmine_hinne') { echo $sort_order == 'ASC' ? '▲' : '▼'; } else { echo '▲▼'; } ?>
-    </a>
-    </th>
-    <th>
-    <a href="?sort=hinnatud_korda&order=<?php echo $sort_by == 'hinnatud_korda' && $sort_order == 'ASC' ? 'DESC' : 'ASC'; ?>">
-        Hinnatud (korda) <?php if ($sort_by == 'hinnatud_korda') { echo $sort_order == 'ASC' ? '▲' : '▼'; } else { echo '▲▼'; } ?>
-    </a>
-    </th>
-    </tr>
-
-    <?php
-       }
-    ?>
-   
-    
-    </thead>
-    <tbody>
-        
-      <?php 
-        
-
-    // Funktsioon, mis tagastab andmed vastavalt lehekülje numbrile ja sordi parameetrile
-
-   function fetchRestaurants($page, $sort_by, $sort_order, $search_term) {
-    global $yhendus;
-    $offset = ($page - 1) * 10; // Arvutame offseti
-    $query = "SELECT * FROM asutused WHERE nimi LIKE '%$search_term%' OR asukoht LIKE '%$search_term%' ORDER BY $sort_by $sort_order LIMIT 10 OFFSET $offset";
-        print_r($query);
-    $result = mysqli_query($yhendus, $query);
-    return $result;
-    }
-
-    
-   
-
-$sort_by = isset($_GET['sort']) ? $_GET['sort'] : 'nimi';
-$sort_order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
-$page = isset($_GET['page']) ? $_GET['page'] : 1;
-$search_term = isset($_GET['search']) ? $_GET['search'] : '';
-
-        
-
-$result = fetchRestaurants($page, $sort_by, $sort_order, $search_term);
-
-            if (mysqli_num_rows($result) > 0) {
-                        // Väljasta andmed tabelisse
-                while ($row = mysqli_fetch_assoc($result)) {
-                echo "<tr>";
-                //echo "<td><a href='#' onclick='openRatingForm(" . $row['id'] . ")'>" . $row['nimi'] . "</a></td>";
-                echo "<td><a href='#' onclick='openRatingForm(" . $row['id'] . ", \"" . $row['nimi'] . "\")'>" . $row['nimi'] . "</a></td>";
-                echo "<td>" . $row['asukoht'] . "</td>";
-                echo "<td>" . $row['keskmine_hinne'] . "</td>";
-                echo "<td>" . $row['hinnatud_korda'] . "</td>";
-                echo "</tr>";
+                    function generateSortLink($column, $sort_by, $sort_order, $search_term, $page) {
+                        $new_order = ($sort_by == $column && $sort_order == 'ASC') ? 'DESC' : 'ASC';
+                        return "?sort=$column&order=$new_order&s=$search_term&page=$page";
+                    }
+                    ?>
+                    <th>
+                        <a href="<?php echo generateSortLink('nimi', $sort_by, $sort_order, $search_term, $page); ?>">
+                            Nimi <?php if ($sort_by == 'nimi') echo $sort_order == 'ASC' ? '▲' : '▼'; else echo '▲▼'; ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="<?php echo generateSortLink('asukoht', $sort_by, $sort_order, $search_term, $page); ?>">
+                            Asukoht <?php if ($sort_by == 'asukoht') echo $sort_order == 'ASC' ? '▲' : '▼'; else echo '▲▼'; ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="<?php echo generateSortLink('keskmine_hinne', $sort_by, $sort_order, $search_term, $page); ?>">
+                            Keskmine hinne <?php if ($sort_by == 'keskmine_hinne') echo $sort_order == 'ASC' ? '▲' : '▼'; else echo '▲▼'; ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="<?php echo generateSortLink('hinnatud_korda', $sort_by, $sort_order, $search_term, $page); ?>">
+                            Hinnatud (korda) <?php if ($sort_by == 'hinnatud_korda') echo $sort_order == 'ASC' ? '▲' : '▼'; else echo '▲▼'; ?>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                function fetchRestaurants($page, $sort_by, $sort_order, $search_term) {
+                    global $yhendus;
+                    $offset = ($page - 1) * 10; // Arvutame offseti
+                    $query = "SELECT * FROM asutused WHERE nimi LIKE '%$search_term%' OR asukoht LIKE '%$search_term%' ORDER BY $sort_by $sort_order LIMIT 10 OFFSET $offset";
+                    $result = mysqli_query($yhendus, $query);
+                    return $result;
                 }
-                  } else {
+
+                $result = fetchRestaurants($page, $sort_by, $sort_order, $search_term);
+
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td><a href='#' onclick='openRatingForm(" . $row['id'] . ", \"" . $row['nimi'] . "\")'>" . $row['nimi'] . "</a></td>";
+                        echo "<td>" . $row['asukoht'] . "</td>";
+                        echo "<td>" . $row['keskmine_hinne'] . "</td>";
+                        echo "<td>" . $row['hinnatud_korda'] . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
                     echo "<tr><td colspan='4'>Andmeid ei leitud</td></tr>";
-                   }
+                }
                 ?>
-                
             </tbody>
         </table>
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
                     <div class="col-md-3"></div>
                     <div class="col-md-3"></div>
                     <div class="col-md-3">
-
-        <div class="lk vahetus">
-        <?php if ($page > 1): ?>
-                <a href="?sort=<?php echo $sort_by ?>&page=<?php echo $page - 1 ?>"> < Eelmine</a> 
-            <?php endif; ?>
-            <?php if (mysqli_num_rows($result) == 10): ?>
-            <span>&nbsp;</span>
-            <a href="?sort=<?php echo $sort_by ?>&page=<?php echo $page + 1 ?>">Järgmine ></a>
-            <?php endif; ?>
+                    <div class="lk vahetus">
+                        <?php if ($page > 1): ?>
+                            <a href="?sort=<?php echo $sort_by ?>&order=<?php echo $sort_order ?>&s=<?php echo $search_term ?>&page=<?php echo $page - 1 ?>"> < Eelmine</a>
+                        <?php endif; ?>
+                        <?php if (mysqli_num_rows($result) == 10): ?>
+                            <a href="?sort=<?php echo $sort_by ?>&order=<?php echo $sort_order ?>&s=<?php echo $search_term ?>&page=<?php echo $page + 1 ?>">Järgmine ></a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
-        </div>
-        
-        <!--tunnis tehtud -->
-        <a href="?prev=<?php echo $algus-10; ?>">&lt;&lt;Eelmised</a>
-        <a href="?next=10<?php echo $algus; ?> Järgmised&lt;&lt;</a>
 
     </main>
 
     
-   
 
-
-
+    
 
     <script>
        function openRatingForm(id, name) {
@@ -346,11 +212,6 @@ $result = fetchRestaurants($page, $sort_by, $sort_order, $search_term);
        
     </script>
 
-
-  
-  
-  
-  
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
