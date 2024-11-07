@@ -1,11 +1,10 @@
-<?php
-include('config.php'); // Ühendus andmebaasiga
+<?php include('config.php'); ?>
 <!doctype html>
 <html lang="et">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hindamine</title>
+    <title>Restoranide hindamine</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
        *{
@@ -47,8 +46,6 @@ include('config.php'); // Ühendus andmebaasiga
         .rate > label:hover ~ input:checked ~ label {
             color: #43d000;
         }
-
-/* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
     </style>
 </head>
   <body>
@@ -57,50 +54,51 @@ include('config.php'); // Ühendus andmebaasiga
             <div class="col-2"></div>
             <div class="col-8">
     <?php
-    //hinnangu kustutamine
+    // Hinnangu kustutamine
         if (!empty($_GET["del"])) {
             $del = $_GET["del"];
             $id = $_GET["id"];
             $paring = 'DELETE FROM hinnangud WHERE id=' . $del;
             $valjund = mysqli_query($yhendus, $paring);
-            header('Location: hindamine.php?id=' . $id);
+            header('Location: asutused.php?id=' . $id);
         }
 
-    //hinnangu lisamine
+    // Hinnangu lisamine
         if (!empty($_GET["nimi"]) && !empty($_GET["kommentaar"]) && !empty($_GET["rate"])) {
             $nimi = $_GET["nimi"];
             $kommentaar = $_GET["kommentaar"];
             $rate = $_GET["rate"];
             $id = $_GET["id"];
-            $paring = 'INSERT INTO hinnangud (nimi, kommentaar, hinnang, asutused_id) VALUES ("' . $nimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
+            $paring = 'INSERT INTO hinnangud (nimi, kommentaar, hinnang) VALUES ("' . $nimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
             $valjund = mysqli_query($yhendus, $paring);
 
             // Hindajate arvu ja keskmise hinde uuendamine
             $hindajate_arv_paring = "SELECT hinnatud, keskmine_hinne FROM asutused WHERE id=" . $id;
             $hindajate_arv_valjund = mysqli_query($yhendus, $hindajate_arv_paring);
-            $asutused = mysqli_fetch_assoc($hindajate_arv_valjund);
+            $asutus = mysqli_fetch_assoc($hindajate_arv_valjund);
 
-            $hindajate_arv = $asutused['hinnatud'];
-            $olemasolev_keskmine = $asutused['keskmine_hinne'];
+            $hindajate_arv = $asutus['hinnatud'];
+            $olemasolev_keskmine = $asutus['keskmine_hinne'];
 
             $uus_hindajate_arv = $hindajate_arv + 1;
-            $uus_keskmine = round((($olemasolev_keskmine * $hindajate_arv) + $rate) / $uus_hindajate_arv,2);
+            $uus_keskmine = round((($olemasolev_keskmine * $hindajate_arv) + $rate) / $uus_hindajate_arv, 2);
 
             $paring = 'UPDATE asutused SET hinnatud = ' . $uus_hindajate_arv . ', keskmine_hinne = ' . $uus_keskmine . ' WHERE id=' . $id;
             $valjund = mysqli_query($yhendus, $paring);
             header('Location: hindamine.php?id=' . $id);
         }
-    //hinnangute kuvamine
+
+    // Hinnangute kuvamine
         if (!empty($_GET["id"])) {
             $id = $_GET["id"];
             $paring = 'SELECT * FROM asutused WHERE id=' . $id;
             $valjund = mysqli_query($yhendus, $paring);
             $ettevotte_nimi = mysqli_fetch_assoc($valjund);
-        } else{
+        } else {
             header('Location: index.php');
         }
     ?>
-      <h1>Hinda kohta <strong><?php echo $ettevotte_nimi['nimi'];  ?></strong></h1>
+      <h1>Hinda restorani <strong><?php echo $ettevotte_nimi['nimi'];  ?></strong></h1>
     <form action="" method="get">
         <div class="row">
             <div class="col-sm-4">Nimi:</div>
@@ -113,28 +111,11 @@ include('config.php'); // Ühendus andmebaasiga
         <div class="row">
             <div class="col-sm-4">Hinnang:</div>
             <div class="col-sm-8">
-                <!-- radionuppudega hinnang -->
                 <div class="rate">
-                    <input type="radio" id="star10" name="rate" value="10" required/>
-                    <label for="star10" title="text">10 stars</label>
-                    <input type="radio" id="star9" name="rate" value="9" />
-                    <label for="star9" title="text">9 stars</label>
-                    <input type="radio" id="star8" name="rate" value="8" />
-                    <label for="star8" title="text">8 stars</label>
-                    <input type="radio" id="star7" name="rate" value="7" />
-                    <label for="star7" title="text">7 stars</label>
-                    <input type="radio" id="star6" name="rate" value="6" />
-                    <label for="star6" title="text">6 star</label>
-                    <input type="radio" id="star5" name="rate" value="5" />
-                    <label for="star5" title="text">5 stars</label>
-                    <input type="radio" id="star4" name="rate" value="4" />
-                    <label for="star4" title="text">4 stars</label>
-                    <input type="radio" id="star3" name="rate" value="3" />
-                    <label for="star3" title="text">3 stars</label>
-                    <input type="radio" id="star2" name="rate" value="2" />
-                    <label for="star2" title="text">2 stars</label>
-                    <input type="radio" id="star1" name="rate" value="1" />
-                    <label for="star1" title="text">1 star</label>
+                    <?php for ($i = 10; $i >= 1; $i--) : ?>
+                        <input type="radio" id="star<?php echo $i; ?>" name="rate" value="<?php echo $i; ?>" required/>
+                        <label for="star<?php echo $i; ?>"><?php echo $i; ?> stars</label>
+                    <?php endfor; ?>
                 </div>
             </div>
         </div>
@@ -154,7 +135,7 @@ include('config.php'); // Ühendus andmebaasiga
                 <th>Hinnang</th>
           </tr>
           <?php
-                $paring = 'SELECT hinnangud.id as hinnangud_id, asutused.nimi as ettevotte_nimi, hinnangud.nimi as hindaja_nimi, hinnangud.kommentaar, hinnangud.hinnang, hinnangud.asutused_id 
+                $paring = 'SELECT hinnangud.id as hinnangud_id, asutused.nimi as ettevotte_nimi, hinnangud.kommentaar, hinnangud.hinnang, hinnangud.asutused_id 
                 FROM asutused
                 INNER JOIN hinnangud ON hinnangud.asutused_id=asutused.id
                 WHERE asutused_id=' . $id;
@@ -164,16 +145,11 @@ include('config.php'); // Ühendus andmebaasiga
                  echo '<td>' . $rida['hindaja_nimi'] . '</td>';
                  echo '<td>' . $rida['kommentaar'] . '</td>';
                  echo '<td>' . $rida['hinnang'] . '/10</td>';
-                 echo '<td><a href="hindamine.php?del=' . $rida['hinnangud_id'] . '&id='.$id.'"><span class="badge text-bg-danger">x</span></a></td>';
+                 echo '<td><a href="hinnangud.php?del=' . $rida['hinnangud_id'] . '&id='.$id.'"><span class="badge text-bg-danger">x</span></a></td>';
                  echo '</tr>';
                 }
           ?>
           </table>
-
-
-
-
-
 </div>
             <div class="col-2"></div>
         </div>
