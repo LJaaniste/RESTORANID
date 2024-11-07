@@ -72,7 +72,7 @@
             $paring = 'INSERT INTO hinnangud (nimi, kommentaar, hinnang, asutused_id) VALUES ("' . $nimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
             $valjund = mysqli_query($yhendus, $paring);
 
-            // Hindajate arvu ja keskmise hinde uuendamine
+    // Hindajate arvu ja keskmise hinde uuendamine
             $hindajate_arv_paring = "SELECT hinnatud, keskmine_hinne FROM asutused WHERE id=" . $id;
             $hindajate_arv_valjund = mysqli_query($yhendus, $hindajate_arv_paring);
             $asutus = mysqli_fetch_assoc($hindajate_arv_valjund);
@@ -98,8 +98,10 @@
             header('Location: index.php');
         }
     ?>
+    <br>
       <h1>Hinda restorani <strong><?php echo $ettevotte_nimi['nimi'];  ?></strong></h1>
     <form action="" method="get">
+        <br>
         <div class="row">
             <div class="col-sm-4">Nimi:</div>
             <div class="col-sm-8"><input required type="text" name="nimi"></div>
@@ -122,7 +124,7 @@
         <input type="hidden" name="id" value="<?php echo $id; ?>">
         <div class="row">
             <div class="col-sm-4"></div>
-            <div class="col-sm-8"><input class="btn btn-danger" type="submit" value="Hinda"></div>
+            <div class="col-sm-8"><input class="btn btn-danger" type="submit" value="Saada"></div>
     </form>
     <div class="row">
             <div class="col-sm-4"> <a class="btn btn-primary btn-sm" href="index.php">Tagasi</a></div>
@@ -130,9 +132,9 @@
 
     <table class="table table-sm">
           <tr>
-                <th>Nimi</th>
-                <th>Kommentaar</th>
-                <th>Hinnang</th>
+                <th><br>Nimi</th>
+                <th><br>Kommentaar</th>
+                <th><br>Hinnang</th>
           </tr>
           <?php
                 $paring = 'SELECT hinnangud.id as hinnangud_id, asutused.nimi as ettevotte_nimi, hinnangud.kommentaar, hinnangud.hinnang, hinnangud.asutused_id 
