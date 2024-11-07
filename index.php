@@ -1,5 +1,4 @@
-<?php include("config.php"); ?>
-
+<?php include('config.php'); ?>
 <!doctype html>
 <html lang="et">
 <head>
@@ -75,7 +74,7 @@
             <div class="col-md-3">
                 <form method="get">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="s" placeholder="Otsi asutust" value="<?php echo htmlspecialchars($_GET['s'] ?? ''); ?>">
+                        <input type="text" class="form-control" name="s" placeholder="Otsi asutust" value="<?php if (!empty($_GET["s"])) echo $_GET["s"]; ?>">
                         <button class="btn btn-primary" type="submit">Otsi</button>
                     </div>
                 </form>
@@ -125,7 +124,7 @@
                 <?php
                 function fetchRestaurants($page, $sort_by, $sort_order, $search_term) {
                     global $yhendus;
-                    $offset = ($page - 1) * 10; // Arvutame offseti
+                    $offset = ($page - 1) * 10; 
                     $query = "SELECT * FROM asutused WHERE nimi LIKE '%$search_term%' OR asukoht LIKE '%$search_term%' ORDER BY $sort_by $sort_order LIMIT 10 OFFSET $offset";
                     $result = mysqli_query($yhendus, $query);
                     return $result;
