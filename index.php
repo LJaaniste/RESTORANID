@@ -180,7 +180,7 @@
         ?>
         </tbody>
         </table>
-
+<br>
         <div class="d-flex justify-content-end">
             <a href="?prev=<?php echo $prev; ?>" class="btn btn-primary <?php if ($algus == 0) echo 'disabled'; ?>" role="button" aria-disabled="<?php if ($algus == 0) echo 'true'; ?>">&lt;&lt; Eelmised</a>
             <a href="?next=<?php echo $next; ?>" class="btn btn-primary ms-2 <?php if ($algus + 10 >= $asutused_kokku) echo 'disabled'; ?>" role="button" aria-disabled="<?php if ($algus + 10 >= $asutused_kokku) echo 'true'; ?>">Järgmised &gt;&gt;</a>

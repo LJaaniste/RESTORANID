@@ -69,7 +69,7 @@
             $kommentaar = $_GET["kommentaar"];
             $rate = $_GET["rate"];
             $id = $_GET["id"];
-            $paring = 'INSERT INTO hinnangud (nimi, kommentaar, hinnang) VALUES ("' . $nimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
+            $paring = 'INSERT INTO hinnangud (nimi, kommentaar, hinnang, asutused_id) VALUES ("' . $nimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
             $valjund = mysqli_query($yhendus, $paring);
 
             // Hindajate arvu ja keskmise hinde uuendamine
