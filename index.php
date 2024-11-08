@@ -62,15 +62,21 @@
 </head>
   <body>
     <?php
+        #$sort_by = $_GET['sort'] ?? 'nimi';
+        #$sort_order = $_GET['order'] ?? 'ASC';
+
         if (!empty($_GET["s"])) {
             $s = $_GET["s"];
-                $paring = 'SELECT * FROM asutused WHERE nimi LIKE "%' . $s . '%" ';
+            #$paring = "SELECT * FROM asutused WHERE nimi LIKE '%$s%' ORDER BY $sort_by $sort_order";
+            $paring = 'SELECT * FROM asutused WHERE nimi LIKE "%' . $s . '%" ';
             #$paring = 'SELECT a.id, a.nimi, a.asukoht, AVG(h.hinnang) as keskmine_hinne, COUNT(h.id) as hinnatud 
                        #FROM asutused a 
                        #LEFT JOIN hinnangud h ON a.id = h.asutused_id 
                        #WHERE a.nimi LIKE "%' . $s . '%" 
                        #GROUP BY a.id';
         } else {
+            #$algus = $_GET['next'] ?? 0;
+            #if ($algus < 0) $algus = 0:
             $algus = 0;
 
             if (isset($_GET['next'])) {

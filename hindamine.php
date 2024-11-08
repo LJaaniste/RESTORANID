@@ -64,26 +64,27 @@
         }
 
     // Hinnangu lisamine
-        if (!empty($_GET["nimi"]) && !empty($_GET["kommentaar"]) && !empty($_GET["rate"])) {
-            $nimi = $_GET["nimi"];
+        if (!empty($_GET["kasutajanimi"]) && !empty($_GET["kommentaar"]) && !empty($_GET["rate"])) {
+            $nimi = $_GET["kasutajanimi"];
             $kommentaar = $_GET["kommentaar"];
             $rate = $_GET["rate"];
             $id = $_GET["id"];
-            $paring = 'INSERT INTO hinnangud (nimi, kommentaar, hinnang, asutused_id) VALUES ("' . $nimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
+            $paring = 'INSERT INTO hinnangud (kasutajanimi, kommentaar, hinnang, asutused_id) VALUES ("' . $kasutajanimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
+            var_dump($paring);
             $valjund = mysqli_query($yhendus, $paring);
 
     // Hindajate arvu ja keskmise hinde uuendamine
-            $hindajate_arv_paring = "SELECT hinnatud, keskmine_hinne FROM asutused WHERE id=" . $id;
+            $hindajate_arv_paring = "SELECT hinnatud_korda, keskmine_hinne FROM asutused WHERE id=" . $id;
             $hindajate_arv_valjund = mysqli_query($yhendus, $hindajate_arv_paring);
             $asutus = mysqli_fetch_assoc($hindajate_arv_valjund);
 
-            $hindajate_arv = $asutus['hinnatud'];
+            $hindajate_arv = $asutus['hinnatud_korda'];
             $olemasolev_keskmine = $asutus['keskmine_hinne'];
 
             $uus_hindajate_arv = $hindajate_arv + 1;
             $uus_keskmine = round((($olemasolev_keskmine * $hindajate_arv) + $rate) / $uus_hindajate_arv, 2);
 
-            $paring = 'UPDATE asutused SET hinnatud = ' . $uus_hindajate_arv . ', keskmine_hinne = ' . $uus_keskmine . ' WHERE id=' . $id;
+            $paring = 'UPDATE asutused SET hinnatud_korda = ' . $uus_hindajate_arv . ', keskmine_hinne = ' . $uus_keskmine . ' WHERE id=' . $id;
             $valjund = mysqli_query($yhendus, $paring);
             header('Location: hindamine.php?id=' . $id);
         }
@@ -144,10 +145,10 @@
                 $valjund = mysqli_query($yhendus, $paring);
                 while ($rida = mysqli_fetch_assoc($valjund)) {
                  echo '<tr>';
-                 echo '<td>' . $rida['hindaja_nimi'] . '</td>';
+                 echo '<td>' . $rida['kasutajanimi'] . '</td>';
                  echo '<td>' . $rida['kommentaar'] . '</td>';
                  echo '<td>' . $rida['hinnang'] . '/10</td>';
-                 echo '<td><a href="hinnangud.php?del=' . $rida['hinnangud_id'] . '&id='.$id.'"><span class="badge text-bg-danger">x</span></a></td>';
+                 echo '<td><a href="hindamine.php?del=' . $rida['hinnangud_id'] . '&id='.$id.'"><span class="badge text-bg-danger">x</span></a></td>';
                  echo '</tr>';
                 }
           ?>
