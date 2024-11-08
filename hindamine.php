@@ -65,11 +65,11 @@
 
     // Hinnangu lisamine
         if (!empty($_GET["kasutajanimi"]) && !empty($_GET["kommentaar"]) && !empty($_GET["rate"])) {
-            $nimi = $_GET["kasutajanimi"];
+            $nimi = $_GET["nimi"];
             $kommentaar = $_GET["kommentaar"];
             $rate = $_GET["rate"];
             $id = $_GET["id"];
-            $paring = 'INSERT INTO hinnangud (kasutajanimi, kommentaar, hinnang, asutused_id) VALUES ("' . $kasutajanimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
+            $paring = 'INSERT INTO hinnangud (kasutajanimi, kommentaar, hinnang, asutused_id) VALUES ("' . $nimi . '", "' . $kommentaar . '", ' . $rate . ', ' . $id . ')';
             var_dump($paring);
             $valjund = mysqli_query($yhendus, $paring);
 
@@ -138,14 +138,14 @@
                 <th><br>Hinnang</th>
           </tr>
           <?php
-                $paring = 'SELECT hinnangud.id as hinnangud_id, asutused.nimi as ettevotte_nimi, hinnangud.kommentaar, hinnangud.hinnang, hinnangud.asutused_id 
+                $paring = 'SELECT hinnangud.id as hinnangud_id, asutused.nimi as ettevotte_nimi, hinnangud.kasutajanimi as hindaja_nimi, hinnangud.kommentaar, hinnangud.hinnang, hinnangud.asutused_id 
                 FROM asutused
                 INNER JOIN hinnangud ON hinnangud.asutused_id=asutused.id
                 WHERE asutused_id=' . $id;
                 $valjund = mysqli_query($yhendus, $paring);
                 while ($rida = mysqli_fetch_assoc($valjund)) {
                  echo '<tr>';
-                 echo '<td>' . $rida['kasutajanimi'] . '</td>';
+                 echo '<td>' . $rida['hindaja_nimi'] . '</td>';
                  echo '<td>' . $rida['kommentaar'] . '</td>';
                  echo '<td>' . $rida['hinnang'] . '/10</td>';
                  echo '<td><a href="hindamine.php?del=' . $rida['hinnangud_id'] . '&id='.$id.'"><span class="badge text-bg-danger">x</span></a></td>';
