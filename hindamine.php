@@ -65,8 +65,8 @@
         }
 
     // Hinnangu lisamine
-        if (!empty($_GET["kasutajanimi"]) && !empty($_GET["kommentaar"]) && !empty($_GET["rate"])) {
-            $nimi = $_GET["kasutajanimi"];
+        if (!empty($_GET["nimi"]) && !empty($_GET["kommentaar"]) && !empty($_GET["rate"])) {
+            $nimi = $_GET["nimi"];
             $kommentaar = $_GET["kommentaar"];
             $rate = $_GET["rate"];
             $id = $_GET["id"];
