@@ -138,15 +138,6 @@
                         return "?sort=$column&order=$new_order&s=$search_term&page=$page";
                     }
                     ?>
-
-        <!-- <table id="example" class="table table-sm"> -->
-
-        <!-- <thead>
-            <tr>
-                <th>Nimi</th>
-                <th>Asukoht</th>
-                <th>Keskmine hinne</th>
-                <th>Hinnatud (korda)</th> -->
                 <th>
                         <a href="<?php echo generateSortLink('nimi', $sort_by, $sort_order, $search_term, $page); ?>">
                             Nimi <?php if ($sort_by == 'nimi') echo $sort_order == 'ASC' ? '▲' : '▼'; else echo '▲▼'; ?>
@@ -190,7 +181,8 @@
         <div class="d-flex justify-content-end">
             <a href="?prev=<?php echo $prev; ?>" class="btn btn-primary <?php if ($algus == 0) echo 'disabled'; ?>" role="button" aria-disabled="<?php if ($algus == 0) echo 'true'; ?>">&lt;&lt; Eelmised</a>
             <a href="?next=<?php echo $next; ?>" class="btn btn-primary ms-2 <?php if ($algus + 10 >= $asutused_kokku) echo 'disabled'; ?>" role="button" aria-disabled="<?php if ($algus + 10 >= $asutused_kokku) echo 'true'; ?>">Järgmised &gt;&gt;</a>
-        </div>
+        </div> 
+        
     </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

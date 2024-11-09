@@ -133,6 +133,10 @@
             <div class="col-sm-4"> <a class="btn btn-primary btn-sm" href="index.php">Tagasi</a></div>
     </div>
 
+    <div class="row">
+        <h3 class="mt-5">Teiste hinnagud</h3>
+    </div>    
+
     <table class="table table-sm">
           <tr>
                 <th><br>Nimi</th>
