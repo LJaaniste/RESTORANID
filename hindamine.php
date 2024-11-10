@@ -134,7 +134,7 @@
     </div>
 
     <div class="row">
-        <h3 class="mt-5">Teiste hinnagud</h3>
+        <h3 class="mt-5">Teiste hinnangud</h3>
     </div>    
 
     <table class="table table-sm">
