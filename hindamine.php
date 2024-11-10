@@ -126,7 +126,7 @@
         <input type="hidden" name="id" value="<?php echo $id; ?>">
         <div class="row">
             <div class="col-sm-4"></div>
-            <div class="col-sm-8"><input class="btn btn-danger" type="submit" value="Saada"></div>
+            <div class="col-sm-8 mt-3"><input class="btn btn-danger" type="submit" value="Saada"></div>
             
     </form>
     <div class="row">
