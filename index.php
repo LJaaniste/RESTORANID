@@ -108,7 +108,7 @@
         $valjund = mysqli_query($yhendus, $paring);
     ?>
     <div class="container">
-        <h1>Valige asutus, mida hinnata</h1>
+        <h1>Valige restoran, mida hinnata</h1>
         <div class="row">
             <div class="col-9">
             </div>
