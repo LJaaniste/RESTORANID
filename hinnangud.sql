@@ -1,5 +1,6 @@
 CREATE TABLE hinnangud (
-    asutused_id INT,
+   
+    id INT,
     kasutajanimi VARCHAR(100),
     kommentaar TEXT,
     hinnang INT,
