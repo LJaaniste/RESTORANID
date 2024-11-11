@@ -1,29 +1,34 @@
-<?php include('config.php'); ?>
-<?php
 
+<?php
 session_start();
+ob_start();
+include('config.php');
 
 
 $error_message = '';
 
-#$correct_username = 'admin';
-#$correct_password = 'Parool123';
+#$kasutajanimi = 'admin';
+#$parool = 'Parool123';
 
+#if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST['kasutajanimi']) && !empty($_POST['parool'])) {
+    $kasutajanimi = $_POST['kasutajanimi'];
+    $parool = $_POST['parool'];
 
-#if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-    if (!empty($_GET['kasutajanimi']) && !empty($_GET['parool'])) {
-    $kasutajanimi = $_GET['kasutajanimi'];
-    $parool = $_GET['parool'];
+    $paring = "SELECT * FROM kasutajad WHERE kasutajanimi='$kasutajanimi";
+    $valjund = mysqli_query($yhendus, $paring);
 
-   
     if ($kasutajanimi === 'admin' && $parool === 'Parool123') {
-        $_SESSION['login']="1";  
-        header("Location: index.php");  
+    #if (mysqli_num_rows($valjund)==1) {
+        $_SESSION['kasutaja']="1";
+        header('Location: index.php');
         exit;
     } else {
-        echo "Vale kasutajanimi või parool";  
-    }
+
+        $error_message = 'Vale kasutajanimi või parool!';
 }
+}
+ob_end_flush();
 ?>
 
 <!doctype html>
@@ -58,9 +63,9 @@ $error_message = '';
     <div class="login-box">
         <h3>Logi sisse</h3>
         <?php if ($error_message): ?>
-            <div class="alert alert-danger"><?php echo $error_message; ?></div>
-        <?php endif; ?>
-        <form action="login.php" method="get">
+            <div class="alert alert-danger"><?php echo $error_message; ?></div> 
+        <?php endif; ?> 
+        <form action="login.php" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Kasutajanimi</label>
                 <input type="text" class="form-control" id="username" name="username" required>

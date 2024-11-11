@@ -4,17 +4,22 @@
 session_start();
 if (!isset($_SESSION['kasutaja'])) {
     header('Location: login.php');
+    #die("Vale koht");
     exit;
 }
 
 ?>
+
+
+<a href="logout.php">Logi välja</a>
+
 
 <!doctype html>
 <html lang="et">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Restoranide hindamine</title>
+    <title>Administratsiooni leht</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
 
@@ -71,22 +76,8 @@ if (!isset($_SESSION['kasutaja'])) {
     </style>
 </head>
   <body>
-  <?php
-    session_start();
-    if (!isset($_SESSION['kasutaja'])) {
-    header("Location: login.php");
-    exit();
-    }
-    ?>
+  
 
-    <h2>Tere, <?php echo $_SESSION['kasutaja']; ?>!</h2>
-    <p>Oled sisselogitud administraatorina.</p>
-
-    
-    
-    
-    
-    
     <?php
 
     
