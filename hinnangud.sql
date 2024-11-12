@@ -1,6 +1,6 @@
 CREATE TABLE hinnangud (
    
-    id INT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     kasutajanimi VARCHAR(100),
     kommentaar TEXT,
     hinnang INT,

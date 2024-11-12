@@ -19,7 +19,6 @@
     </script>  
 
 <style>
-        /* Stiilid siia */
         body {
             font-family: Arial, sans-serif;
         }
@@ -108,7 +107,11 @@
         $valjund = mysqli_query($yhendus, $paring);
     ?>
     <div class="container">
+    <div class="row">
+            <div class="col-6 text-end">
+            
         <h1>Valige restoran, mida hinnata</h1>
+        </div>
         <div class="row">
             <div class="col-9">
             </div>

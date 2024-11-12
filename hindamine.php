@@ -150,13 +150,14 @@
                 WHERE asutused_id=' . $id;
                 $valjund = mysqli_query($yhendus, $paring);
                 while ($rida = mysqli_fetch_assoc($valjund)) {
-                 echo '<tr>';
-                 echo '<td>' . $rida['hindaja_nimi'] . '</td>';
-                 echo '<td>' . $rida['kommentaar'] . '</td>';
-                 echo '<td>' . $rida['hinnang'] . '/10</td>';
-                 echo '<td><a href="hindamine.php?del=' . $rida['hinnangud_id'] . '&id='.$id.'"><span class="badge text-bg-danger">x</span></a></td>';
-                 echo '</tr>';
+                    echo '<tr>';
+                    echo '<td>' . $rida['hindaja_nimi'] . '</td>';
+                    echo '<td>' . $rida['kommentaar'] . '</td>';
+                    echo '<td>' . $rida['hinnang'] . '/10</td>';
+                    echo '<td><a href="hindamine.php?del=' . $rida['hinnangud_id'] . '&id='.$id.'"><span class="badge text-bg-danger">x</span></a></td>';
+                    echo '</tr>';
                 }
+                      
           ?>
           </table>
 </div>
