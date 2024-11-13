@@ -1,8 +1,8 @@
-<?php include('config.php'); ?>
+<?php include('../config.php'); ?>
 
 <?php
 session_start();
-if (!isset($_SESSION['kasutaja'])) {
+if (!isset($_SESSION['kasutajanimi'])) {
     header('Location: login.php');
     #die("Vale koht");
     exit;

@@ -1,8 +1,8 @@
 
 <?php
 session_start();
-ob_start();
-include('config.php');
+#ob_start();
+#include('config.php');
 
 
 $error_message = '';
@@ -15,20 +15,21 @@ $error_message = '';
     $kasutajanimi = $_POST['kasutajanimi'];
     $parool = $_POST['parool'];
 
-    $paring = "SELECT * FROM kasutajad WHERE kasutajanimi='$kasutajanimi";
-    $valjund = mysqli_query($yhendus, $paring);
+    #$paring = "SELECT * FROM kasutajad WHERE kasutajanimi='$kasutajanimi";
+    #$valjund = mysqli_query($yhendus, $paring);
 
     if ($kasutajanimi === 'admin' && $parool === 'Parool123') {
     #if (mysqli_num_rows($valjund)==1) {
-        $_SESSION['kasutaja']="1";
+        $_SESSION['kasutajanimi']=1;
         header('Location: index.php');
-        exit;
+        #exit;
     } else {
 
         $error_message = 'Vale kasutajanimi või parool!';
+        #echo "Vale kasutajanimi või parool!";
 }
 }
-ob_end_flush();
+#ob_end_flush();
 ?>
 
 <!doctype html>
@@ -67,12 +68,12 @@ ob_end_flush();
         <?php endif; ?> 
         <form action="login.php" method="post">
             <div class="mb-3">
-                <label for="username" class="form-label">Kasutajanimi</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+                <label for="kasutajanimi" class="form-label">Kasutajanimi</label>
+                <input type="text" class="form-control" id="kasutajanimi" name="kasutajanimi" required>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Parool</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <label for="parool" class="form-label">Parool</label>
+                <input type="parool" class="form-control" id="parool" name="parool" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Logi sisse</button>
         </form>
