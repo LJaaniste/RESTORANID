@@ -2,7 +2,7 @@
 $kasutaja = "leena";
 $dbserver = "localhost";
 $andmebaas = "restoranid";
-$pw = "Password";
+$pw = "Password123";
 
 $yhendus = mysqli_connect($dbserver, $kasutaja, $pw, $andmebaas);
 if(!$yhendus){
